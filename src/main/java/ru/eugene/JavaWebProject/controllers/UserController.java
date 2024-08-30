@@ -1,15 +1,14 @@
 package ru.eugene.JavaWebProject.controllers;
 
 import org.springframework.data.domain.Page;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import ru.eugene.JavaWebProject.models.CustomErrorsModel;
 import ru.eugene.JavaWebProject.models.UserModel;
+import ru.eugene.JavaWebProject.models.errors.Errors;
 import ru.eugene.JavaWebProject.services.UserService;
 
 import java.security.NoSuchAlgorithmException;
-import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 @RestController
 public class UserController {
@@ -19,15 +18,24 @@ public class UserController {
         this.userService = userService;
     }
 
+    @GetMapping("/")
+    public UserModel index() {
+        throw new CustomErrorsModel(Errors.ERR_USER_NOT_FOUND);
+    }
+
     @GetMapping("/users")
-    public Page<UserModel> getUsers (@RequestParam(defaultValue = "0") int page,
-                                     @RequestParam(defaultValue = "10") int size) {
-        return this.userService.getUsers(page, size);
+    public Page<UserModel> getUsers(@RequestParam(defaultValue = "0") int page,
+                                    @RequestParam(defaultValue = "10") int size) {
+        Page<UserModel> users = this.userService.getUsers(page, size);
+        if (users.isEmpty()) throw new CustomErrorsModel(Errors.ERR_USERS_NOT_FOUND);
+        return users;
     }
 
     @GetMapping("/users/{id}")
     public UserModel getUserById(@PathVariable("id") String id) {
-        return this.userService.getUserById(id);
+        UserModel user = this.userService.getUserById(id);
+        if (user == null) throw new CustomErrorsModel(Errors.ERR_USER_NOT_FOUND);
+        return user;
     }
 
     @PostMapping("/users")
@@ -35,9 +43,9 @@ public class UserController {
         String username = (String) payload.get("username");
         String email = (String) payload.get("email");
         String password = (String) payload.get("password");
-        if (username == null | username.isEmpty()) return null;
-        if (email == null | email.isEmpty()) return null;
-        if (password == null | password.isEmpty()) return null;
+        if (username == null | username.isEmpty()) throw new CustomErrorsModel(Errors.ERR_REQUIRED_FIELD);
+        if (email == null | email.isEmpty()) throw new CustomErrorsModel(Errors.ERR_REQUIRED_FIELD);
+        if (password == null | password.isEmpty()) throw new CustomErrorsModel(Errors.ERR_REQUIRED_FIELD);
 
         UserModel user = new UserModel(username, email, password);
 
