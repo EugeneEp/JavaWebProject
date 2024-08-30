@@ -1,11 +1,12 @@
 package ru.eugene.JavaWebProject.services;
 
-import org.apache.catalina.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import ru.eugene.JavaWebProject.models.CustomErrorsModel;
 import ru.eugene.JavaWebProject.models.UserModel;
+import ru.eugene.JavaWebProject.models.errors.Errors;
 import ru.eugene.JavaWebProject.repositories.UserRepository;
 
 import java.security.MessageDigest;
@@ -30,7 +31,7 @@ public class UserService {
     }
 
     public UserModel createUser(UserModel user) throws NoSuchAlgorithmException {
-        if (userRepository.findByEmail(user.getEmail()) != null) return null;
+        if (userRepository.findByEmail(user.getEmail()) != null) throw new CustomErrorsModel(Errors.ERR_USER_NOT_FOUND);
         user.setPasswordHash(this.getSHA256hash(user.getPasswordHash()));
         return userRepository.save(user);
     }
@@ -38,11 +39,22 @@ public class UserService {
     public UserModel updateUser(String id, String username, String password) throws NoSuchAlgorithmException {
         UserModel user = this.getUserById(id);
         if (user == null) {
-            return null;
+            throw new CustomErrorsModel(Errors.ERR_USER_NOT_FOUND);
         }
 
-        if (username != null && !username.isEmpty()) user.setUsername(username);
-        if (password != null && !password.isEmpty()) user.setPasswordHash(getSHA256hash(password));
+        boolean changes = false;
+
+        if (username != null && !username.isEmpty()){
+            user.setUsername(username);
+            changes = true;
+        }
+        if (password != null && !password.isEmpty()){
+            user.setPasswordHash(getSHA256hash(password));
+            changes = true;
+        }
+        if (!changes) {
+            return user;
+        }
 
         return userRepository.save(user);
     }
