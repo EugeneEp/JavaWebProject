@@ -1,4 +1,4 @@
-package ru.eugene.JavaWebProject.services;
+package ru.eugene.JavaWebProject.api.v1.services;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
@@ -7,7 +7,7 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import ru.eugene.JavaWebProject.models.CustomErrorsModel;
+import ru.eugene.JavaWebProject.api.v1.models.CustomErrorsModel;
 
 import java.util.Calendar;
 import java.util.Date;

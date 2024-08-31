@@ -1,10 +1,11 @@
-package ru.eugene.JavaWebProject.models.errors;
+package ru.eugene.JavaWebProject.api.v1.models.errors;
 
 import org.springframework.http.HttpStatus;
 
 public enum Errors {
     ERR_USER_NOT_FOUND ("User not found", HttpStatus.NOT_FOUND),
     ERR_USERS_NOT_FOUND ("Users not found", HttpStatus.NOT_FOUND),
+    ERR_USER_EXISTS ("User with this email already exists", HttpStatus.BAD_REQUEST),
     ERR_REQUIRED_FIELD ("Required field is empty", HttpStatus.BAD_REQUEST),
     ERR_AUTH ("Authentication data is incorrect", HttpStatus.UNAUTHORIZED),
     ERR_TOKEN_MISSING ("Token is missing", HttpStatus.FORBIDDEN),

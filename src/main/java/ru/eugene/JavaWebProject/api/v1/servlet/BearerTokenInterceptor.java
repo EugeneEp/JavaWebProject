@@ -1,13 +1,13 @@
-package ru.eugene.JavaWebProject.servlet;
+package ru.eugene.JavaWebProject.api.v1.servlet;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-import ru.eugene.JavaWebProject.models.CustomErrorsModel;
-import ru.eugene.JavaWebProject.models.errors.Errors;
-import ru.eugene.JavaWebProject.services.JWTTokenService;
+import ru.eugene.JavaWebProject.api.v1.models.CustomErrorsModel;
+import ru.eugene.JavaWebProject.api.v1.models.errors.Errors;
+import ru.eugene.JavaWebProject.api.v1.services.JWTTokenService;
 
 @Component
 public class BearerTokenInterceptor implements HandlerInterceptor {

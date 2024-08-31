@@ -1,13 +1,13 @@
-package ru.eugene.JavaWebProject.services;
+package ru.eugene.JavaWebProject.api.v1.services;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import ru.eugene.JavaWebProject.models.CustomErrorsModel;
-import ru.eugene.JavaWebProject.models.UserModel;
-import ru.eugene.JavaWebProject.models.errors.Errors;
-import ru.eugene.JavaWebProject.repositories.UserRepository;
+import ru.eugene.JavaWebProject.api.v1.models.CustomErrorsModel;
+import ru.eugene.JavaWebProject.api.v1.models.UserModel;
+import ru.eugene.JavaWebProject.api.v1.models.errors.Errors;
+import ru.eugene.JavaWebProject.api.v1.repositories.UserRepository;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -31,7 +31,7 @@ public class UserService {
     }
 
     public UserModel createUser(UserModel user) throws NoSuchAlgorithmException {
-        if (userRepository.findByEmail(user.getEmail()) != null) throw new CustomErrorsModel(Errors.ERR_USER_NOT_FOUND);
+        if (userRepository.findByEmail(user.getEmail()) != null) throw new CustomErrorsModel(Errors.ERR_USER_EXISTS);
         user.setPasswordHash(this.getSHA256hash(user.getPasswordHash()));
         return userRepository.save(user);
     }
