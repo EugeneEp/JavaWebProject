@@ -1,7 +1,7 @@
-package ru.eugene.JavaWebProject.models;
+package ru.eugene.JavaWebProject.api.v1.models;
 
 import org.springframework.http.HttpStatus;
-import ru.eugene.JavaWebProject.models.errors.Errors;
+import ru.eugene.JavaWebProject.api.v1.models.errors.Errors;
 
 import java.util.HashMap;
 import java.util.Map;

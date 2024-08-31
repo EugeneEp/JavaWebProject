@@ -1,4 +1,4 @@
-package ru.eugene.JavaWebProject.models;
+package ru.eugene.JavaWebProject.api.v1.models;
 
 import jakarta.persistence.*;
 
