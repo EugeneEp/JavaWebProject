@@ -18,6 +18,14 @@ public class CustomErrorsModel extends RuntimeException {
         this.setStatus(error.getStatus());
     }
 
+    public CustomErrorsModel(String _message, HttpStatus status) {
+        Map<String,String> message = new HashMap<>();
+        message.put("message", _message);
+        message.put("status", "error");
+        this.setMessage(message);
+        this.setStatus(status);
+    }
+
     public HttpStatus getStatus() {
         return status;
     }

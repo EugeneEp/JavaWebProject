@@ -1,7 +1,10 @@
 package ru.eugene.JavaWebProject.controllers;
 
+import jakarta.annotation.PostConstruct;
+import jakarta.persistence.PrePersist;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.HandlerInterceptor;
 import ru.eugene.JavaWebProject.models.CustomErrorsModel;
 import ru.eugene.JavaWebProject.models.UserModel;
 import ru.eugene.JavaWebProject.models.errors.Errors;
@@ -11,16 +14,11 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 
 @RestController
-public class UserController {
+public class UserController implements HandlerInterceptor {
     private final UserService userService;
 
     public UserController(UserService userService) {
         this.userService = userService;
-    }
-
-    @GetMapping("/")
-    public UserModel index() {
-        throw new CustomErrorsModel(Errors.ERR_USER_NOT_FOUND);
     }
 
     @GetMapping("/users")
