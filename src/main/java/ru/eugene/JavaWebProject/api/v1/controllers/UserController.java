@@ -1,16 +1,22 @@
 package ru.eugene.JavaWebProject.api.v1.controllers;
 
+import io.micrometer.common.util.StringUtils;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.HandlerInterceptor;
 import ru.eugene.JavaWebProject.api.v1.models.CustomErrorsModel;
 import ru.eugene.JavaWebProject.api.v1.models.UserModel;
-import ru.eugene.JavaWebProject.api.v1.models.errors.Errors;
+import ru.eugene.JavaWebProject.api.v1.enums.Errors;
+import ru.eugene.JavaWebProject.api.v1.models.requests.CreateUserRequest;
+import ru.eugene.JavaWebProject.api.v1.models.requests.UpdateUserRequest;
 import ru.eugene.JavaWebProject.api.v1.services.UserService;
 
 import java.security.NoSuchAlgorithmException;
-import java.util.Map;
 
+@SecurityRequirement(name = "Authorization")
+@Tag(name = "Users", description = "Users management APIs")
 @RestController
 @RequestMapping("/api/v1/users")
 public class UserController implements HandlerInterceptor {
@@ -36,24 +42,20 @@ public class UserController implements HandlerInterceptor {
     }
 
     @PostMapping
-    public UserModel createUser(@RequestBody Map<String, Object> payload) throws NoSuchAlgorithmException {
-        String username = (String) payload.get("username");
-        String email = (String) payload.get("email");
-        String password = (String) payload.get("password");
-        if (username == null | username.isEmpty()) throw new CustomErrorsModel(Errors.ERR_REQUIRED_FIELD);
-        if (email == null | email.isEmpty()) throw new CustomErrorsModel(Errors.ERR_REQUIRED_FIELD);
-        if (password == null | password.isEmpty()) throw new CustomErrorsModel(Errors.ERR_REQUIRED_FIELD);
+    public UserModel createUser(@RequestBody CreateUserRequest req) throws NoSuchAlgorithmException {
+        if (StringUtils.isEmpty(req.username)) throw new CustomErrorsModel(Errors.ERR_REQUIRED_FIELD);
+        if (StringUtils.isEmpty(req.email)) throw new CustomErrorsModel(Errors.ERR_REQUIRED_FIELD);
+        if (StringUtils.isEmpty(req.password)) throw new CustomErrorsModel(Errors.ERR_REQUIRED_FIELD);
 
-        UserModel user = new UserModel(username, email, password);
-
-        return userService.createUser(user);
+        return userService.createUser(
+                new UserModel(req.username, req.email, req.password)
+        );
     }
 
     @PatchMapping("/{id}")
-    public UserModel updateUser(@PathVariable("id") String id, @RequestBody Map<String, Object> payload) throws NoSuchAlgorithmException {
+    public UserModel updateUser(@PathVariable("id") String id, @RequestBody UpdateUserRequest req) throws NoSuchAlgorithmException {
         return userService.updateUser(id,
-                (String) payload.get("username"),
-                (String) payload.get("password"));
+                req.username, req.password);
     }
 
     @DeleteMapping("/{id}")

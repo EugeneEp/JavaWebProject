@@ -1,7 +1,8 @@
-package ru.eugene.JavaWebProject.api.v1.models.errors;
+package ru.eugene.JavaWebProject.api.v1.enums;
 
 import org.springframework.http.HttpStatus;
 
+// Набор константных кастомных ошибок
 public enum Errors {
     ERR_USER_NOT_FOUND ("User not found", HttpStatus.NOT_FOUND),
     ERR_USERS_NOT_FOUND ("Users not found", HttpStatus.NOT_FOUND),

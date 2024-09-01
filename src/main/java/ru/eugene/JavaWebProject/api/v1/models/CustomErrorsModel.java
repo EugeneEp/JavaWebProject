@@ -1,11 +1,12 @@
 package ru.eugene.JavaWebProject.api.v1.models;
 
 import org.springframework.http.HttpStatus;
-import ru.eugene.JavaWebProject.api.v1.models.errors.Errors;
+import ru.eugene.JavaWebProject.api.v1.enums.Errors;
 
 import java.util.HashMap;
 import java.util.Map;
 
+// Класс, в котором переделана базовая логика формирования ответа исключений
 public class CustomErrorsModel extends RuntimeException {
     private HttpStatus status;
     private Map<String, String> message;
