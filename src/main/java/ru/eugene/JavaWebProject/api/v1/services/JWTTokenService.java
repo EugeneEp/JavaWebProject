@@ -22,6 +22,7 @@ public class JWTTokenService {
     @Value("${jwttokenservice.expires-at-hours}")
     private Integer ExpiresAtHours;
 
+    // Метод для создания JWT токена
     public String tokenCreate(String issuer) {
         Algorithm algorithm = Algorithm.HMAC256(this.ApiKey);
         Map<String,String> res = new HashMap<>();
@@ -35,6 +36,7 @@ public class JWTTokenService {
                 .sign(algorithm);
     }
 
+    // Метод для сверки JWT токена на корректность и просроченность
     public boolean verifyToken(String token, String issuer) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(this.ApiKey);

@@ -1,16 +1,17 @@
 package ru.eugene.JavaWebProject.api.v1.controllers;
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import io.micrometer.common.util.StringUtils;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.web.bind.annotation.*;
 import ru.eugene.JavaWebProject.api.v1.models.CustomErrorsModel;
-import ru.eugene.JavaWebProject.api.v1.models.errors.Errors;
+import ru.eugene.JavaWebProject.api.v1.enums.Errors;
+import ru.eugene.JavaWebProject.api.v1.models.requests.GetAPIKeyRequest;
 import ru.eugene.JavaWebProject.api.v1.services.JWTTokenService;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@Tag(name = "Auth", description = "Get auth token API")
 @RestController
 @RequestMapping("/api/v1/auth")
 public class AuthController {
@@ -21,16 +22,14 @@ public class AuthController {
     }
 
     @PostMapping
-    public Map<String,String> getApiKey(@RequestBody Map<String, Object> payload) {
-        String username = (String) payload.get("username");
-        String password = (String) payload.get("password");
-        if (username == null | username.isEmpty()) throw new CustomErrorsModel(Errors.ERR_REQUIRED_FIELD);
-        if (password == null | password.isEmpty()) throw new CustomErrorsModel(Errors.ERR_REQUIRED_FIELD);
+    public Map<String,String> getAPIKey(@RequestBody GetAPIKeyRequest req) {
+        if (StringUtils.isEmpty(req.username)) throw new CustomErrorsModel(Errors.ERR_REQUIRED_FIELD);
+        if (StringUtils.isEmpty(req.password)) throw new CustomErrorsModel(Errors.ERR_REQUIRED_FIELD);
 
-        if (!username.equals("admin") && !password.equals("admin")) throw new CustomErrorsModel(Errors.ERR_AUTH);
+        if (!req.username.equals("admin") && !req.password.equals("admin")) throw new CustomErrorsModel(Errors.ERR_AUTH);
 
         Map<String,String> res = new HashMap<>();
-        res.put("api_key", this.jwtTokenService.tokenCreate(username));
+        res.put("api_key", this.jwtTokenService.tokenCreate(req.username));
 
         return res;
     }

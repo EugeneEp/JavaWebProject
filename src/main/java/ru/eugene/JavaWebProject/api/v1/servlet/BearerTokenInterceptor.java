@@ -6,9 +6,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 import ru.eugene.JavaWebProject.api.v1.models.CustomErrorsModel;
-import ru.eugene.JavaWebProject.api.v1.models.errors.Errors;
+import ru.eugene.JavaWebProject.api.v1.enums.Errors;
 import ru.eugene.JavaWebProject.api.v1.services.JWTTokenService;
 
+// Перехватчик, который отвечает за валидацию HTTP заголовков.
 @Component
 public class BearerTokenInterceptor implements HandlerInterceptor {
     private final JWTTokenService jwtTokenService;
@@ -26,6 +27,7 @@ public class BearerTokenInterceptor implements HandlerInterceptor {
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object object, ModelAndView model) throws Exception {
     }
 
+    // Метод позволяет проверить заголовки на наличие JWT токена и провалидировать его.
     @Override
     public boolean preHandle(HttpServletRequest request,
                              HttpServletResponse response, Object handler) throws Exception {
