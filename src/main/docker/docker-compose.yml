@@ -1,0 +1,33 @@
+version: '2'
+
+services:
+  app:
+    image: 'java-web-project:latest'
+    build:
+      context: .
+    container_name: app
+    depends_on:
+      - db
+    environment:
+      - DB_IP=db
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=11111
+    ports:
+      - "8080:8080"
+    expose:
+      - 8080
+
+  db:
+    image: 'postgres:16'
+    container_name: db
+    hostname: db
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=11111
+      - POSTGRES_DB=test
+    ports:
+      - "5432:5432"
+    expose:
+      - 5432

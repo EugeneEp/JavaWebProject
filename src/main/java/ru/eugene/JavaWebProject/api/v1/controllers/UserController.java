@@ -1,6 +1,7 @@
 package ru.eugene.JavaWebProject.api.v1.controllers;
 
 import io.micrometer.common.util.StringUtils;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Page;
@@ -26,6 +27,7 @@ public class UserController implements HandlerInterceptor {
         this.userService = userService;
     }
 
+    @Operation(summary = "Get all users (paginated)")
     @GetMapping
     public Page<UserModel> getUsers(@RequestParam(defaultValue = "0") int page,
                                     @RequestParam(defaultValue = "10") int size) {
@@ -34,6 +36,7 @@ public class UserController implements HandlerInterceptor {
         return users;
     }
 
+    @Operation(summary = "Get user by id")
     @GetMapping("/{id}")
     public UserModel getUserById(@PathVariable("id") String id) {
         UserModel user = this.userService.getUserById(id);
@@ -41,6 +44,7 @@ public class UserController implements HandlerInterceptor {
         return user;
     }
 
+    @Operation(summary = "Create user")
     @PostMapping
     public UserModel createUser(@RequestBody CreateUserRequest req) throws NoSuchAlgorithmException {
         if (StringUtils.isEmpty(req.username)) throw new CustomErrorsModel(Errors.ERR_REQUIRED_FIELD);
@@ -52,12 +56,14 @@ public class UserController implements HandlerInterceptor {
         );
     }
 
+    @Operation(summary = "Update user by id")
     @PatchMapping("/{id}")
     public UserModel updateUser(@PathVariable("id") String id, @RequestBody UpdateUserRequest req) throws NoSuchAlgorithmException {
         return userService.updateUser(id,
                 req.username, req.password);
     }
 
+    @Operation(summary = "Delete user")
     @DeleteMapping("/{id}")
     public void deleteUserById(@PathVariable("id") String id) {
         this.userService.deleteUserById(id);
