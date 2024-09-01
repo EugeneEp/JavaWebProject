@@ -1,6 +1,7 @@
 package ru.eugene.JavaWebProject.api.v1.controllers;
 
 import io.micrometer.common.util.StringUtils;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 import ru.eugene.JavaWebProject.api.v1.models.CustomErrorsModel;
@@ -21,6 +22,8 @@ public class AuthController {
         this.jwtTokenService = jwtTokenService;
     }
 
+    @Operation(summary = "Get JWT Token",
+            description = "username=admin / password=admin")
     @PostMapping
     public Map<String,String> getAPIKey(@RequestBody GetAPIKeyRequest req) {
         if (StringUtils.isEmpty(req.username)) throw new CustomErrorsModel(Errors.ERR_REQUIRED_FIELD);
