@@ -10,6 +10,7 @@ import java.util.Map;
 public class CustomErrorsModel extends RuntimeException {
     private HttpStatus status;
     private Map<String, String> message;
+    private String detailedMessage;
 
     public CustomErrorsModel(Errors error) {
         Map<String,String> message = new HashMap<>();
@@ -17,6 +18,7 @@ public class CustomErrorsModel extends RuntimeException {
         message.put("status", "error");
         this.setMessage(message);
         this.setStatus(error.getStatus());
+        this.setDetailedMessage(error.getMessage());
     }
 
     public CustomErrorsModel(String _message, HttpStatus status) {
@@ -37,6 +39,15 @@ public class CustomErrorsModel extends RuntimeException {
 
     public void setMessage(Map<String, String> message) {
         this.message = message;
+    }
+
+    public void setDetailedMessage(String detailedMessage) {
+        this.detailedMessage = detailedMessage;
+    }
+
+    @Override
+    public String getMessage() {
+        return this.detailedMessage;
     }
 
     public Map<String, String> getMappedMessage() {
