@@ -18,6 +18,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
     // Добавляем кастомный перехватчик, который отвечает за обработку запросов по пути /users/**
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(interceptor).addPathPatterns("/users/**");
+        registry.addInterceptor(interceptor).addPathPatterns("/**/users/**");
     }
 }
